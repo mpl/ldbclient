@@ -56,7 +56,7 @@ func list(file string) error {
 	it := kv.Find("", "")
 	defer it.Close()
 	for it.Next() {
-		fmt.Println(it.Key(), it.Value())
+		fmt.Println(it.Key(), "|", it.Value())
 	}
 	return nil
 }
