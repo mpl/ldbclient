@@ -20,17 +20,26 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"perkeep.org/pkg/sorted/leveldb"
 )
 
+func usage() {
+	fmt.Fprintf(os.Stderr, "usage: ldbclient dbfile ls|rm <key>\n")
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
 func main() {
+	flag.Usage = usage
 	flag.Parse()
 
 	args := flag.Args()
 	largs := len(args)
 	if largs < 2 || largs > 3 {
-		log.Fatalf("want 2 or 3 args, not %d", largs)
+		log.Printf("want 2 or 3 args, not %d", largs)
+		usage()
 	}
 
 	var err error
@@ -40,7 +49,8 @@ func main() {
 	case "rm":
 		err = delete(args[0], args[2])
 	default:
-		log.Fatal("unknown command")
+		log.Print("unknown command")
+		usage()
 	}
 	if err != nil {
 		log.Fatal(err)
